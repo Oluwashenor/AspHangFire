@@ -1,5 +1,6 @@
 ﻿using AspHangFire.Data;
 using AspHangFire.Models;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspHangFire.Controllers
@@ -10,10 +11,12 @@ namespace AspHangFire.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public PersonController(ApplicationDbContext context)
+        public PersonController(ApplicationDbContext context, IBackgroundJobClient backgroundJobClient)
         {
             _context = context;
+            _backgroundJobClient = backgroundJobClient; 
         }
 
         [HttpGet]
@@ -24,17 +27,23 @@ namespace AspHangFire.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Person person )
         {
+            _backgroundJobClient.Enqueue(()=>Console.WriteLine(person.Name));
             if (ModelState.IsValid)
             {
-                await _context.People.AddAsync(person);
-                if(await _context.SaveChangesAsync() > 0)
-                {
-                    await Task.Delay(5000);
-                    return Ok("Person Created,Response");
-                }
-                
+                _backgroundJobClient.Enqueue(() => CreatePerson(person));
+                return Ok("Person Created,Response");
             }
             return StatusCode(StatusCodes.Status400BadRequest);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task CreatePerson(Person person)
+        {
+            await _context.People.AddAsync(person);
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Person Created");
+            await Task.Delay(5000);
+            
         }
     }
 }
