@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspHangFire", "AspHangFire.csproj", "{6703F7F6-736D-45BD-9FEB-A1E8A2642CB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6703F7F6-736D-45BD-9FEB-A1E8A2642CB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6703F7F6-736D-45BD-9FEB-A1E8A2642CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6703F7F6-736D-45BD-9FEB-A1E8A2642CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6703F7F6-736D-45BD-9FEB-A1E8A2642CB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55C4A784-4D5D-4196-A313-3CB499F03B49}
+	EndGlobalSection
+EndGlobal
