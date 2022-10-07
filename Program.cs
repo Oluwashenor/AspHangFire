@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(x=>x.UseSqlServer(
     ));
 
 builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
+builder.Services.AddTransient<ITimeService, TimeService>();
 
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -55,6 +56,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<ITimeService>("print-time", service=> service.PrintNow(), Cron.Minutely());
 
 app.MapControllers();
 

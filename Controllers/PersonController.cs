@@ -37,8 +37,10 @@ namespace AspHangFire.Controllers
         [HttpPost("schedule")]
         public IActionResult Schedule(string person)
         {
-            _backgroundJobClient.Schedule(() => Console.WriteLine("The person name is "+ person),
+           var jobId = _backgroundJobClient.Schedule(() => Console.WriteLine("The person name is "+ person),
                 TimeSpan.FromMinutes(5));
+            _backgroundJobClient.ContinueJobWith(jobId,
+                () => Console.WriteLine($"The job with Id {jobId} is completed"));
             return Ok();
         }
 
