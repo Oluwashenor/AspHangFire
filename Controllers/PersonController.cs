@@ -1,5 +1,6 @@
 ﻿using AspHangFire.Data;
 using AspHangFire.Models;
+using AspHangFire.Service;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,23 +28,20 @@ namespace AspHangFire.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Person person )
         {
-            _backgroundJobClient.Enqueue(()=>Console.WriteLine(person.Name));
-            if (ModelState.IsValid)
-            {
-                _backgroundJobClient.Enqueue(() => CreatePerson(person));
+          
+                _backgroundJobClient.Enqueue<IPeopleRepository>(repository =>
+                repository.CreatePerson(person));
                 return Ok("Person Created,Response");
-            }
-            return StatusCode(StatusCodes.Status400BadRequest);
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task CreatePerson(Person person)
+        [HttpPost("schedule")]
+        public IActionResult Schedule(string person)
         {
-            await _context.People.AddAsync(person);
-            await _context.SaveChangesAsync();
-            Console.WriteLine("Person Created");
-            await Task.Delay(5000);
-            
+            _backgroundJobClient.Schedule(() => Console.WriteLine("The person name is "+ person),
+                TimeSpan.FromMinutes(5));
+            return Ok();
         }
+
+       
     }
 }

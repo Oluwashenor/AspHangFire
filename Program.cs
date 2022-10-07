@@ -1,4 +1,5 @@
 using AspHangFire.Data;
+using AspHangFire.Service;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(x=>x.UseSqlServer(
    connectionString
     ));
 
-
+builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
 
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -33,7 +34,10 @@ builder.Services.AddHangfire(configuration => configuration
     })
     );
 
-builder.Services.AddHangfireServer();
+builder.Services.AddHangfireServer(
+//    options => options
+//.SchedulePollingInterval  = TimeSpan.FromSeconds(5)
+);
 
 
 var app = builder.Build();
